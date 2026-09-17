@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Писокоть Великолепный</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.slider {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    overflow: hidden;
+    line-height: 0;
+}
+
+/* Основное изображение */
+.slider > img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Слой со второй фотографией */
+.after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Вторая фотография имеет размер всего слайдера,
+   а не размер области .after */
+.after img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+}
+
+/* Вертикальная линия ползунка */
+.handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: #ffffff;
+    transform: translateX(-50%);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+/* Круглая ручка */
+.handle::after {
+    content: "↔";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #ffffff;
+    color: #222222;
+    font-size: 22px;
+    line-height: 44px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* Невидимый элемент управления */
+.slider input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+}
+</style>
+</head>
+
+<body>
+
+<div class="slider">
+
+    <!-- Первая фотография -->
+    <img src="original.png" alt="">
+
+    <!-- Вторая фотография -->
+    <div class="after">
+        <img src="satire.png" alt="">
+    </div>
+
+    <!-- Ползунок -->
+    <div class="handle"></div>
+
+    <!-- Управление -->
+    <input
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        aria-label="Сравнить изображения"
+    >
+
+</div>
+
+<script>
+const slider = document.querySelector(".slider");
+const after = slider.querySelector(".after");
+const afterImage = after.querySelector("img");
+const handle = slider.querySelector(".handle");
+const range = slider.querySelector("input");
+
+
+/* Подгоняем вторую фотографию под полную ширину слайдера */
+function setImageSize() {
+    afterImage.style.width = slider.clientWidth + "px";
+}
+
+
+/* Двигаем границу между фотографиями */
+function updateSlider(value) {
+    after.style.width = value + "%";
+    handle.style.left = value + "%";
+}
+
+
+/* После загрузки страницы */
+window.addEventListener("load", function () {
+    setImageSize();
+    updateSlider(range.value);
+});
+
+
+/* При изменении размера окна */
+window.addEventListener("resize", function () {
+    setImageSize();
+});
+
+
+/* Движение ползунка */
+range.addEventListener("input", function () {
+    updateSlider(this.value);
+});
+
+
+/* Первоначальная установка */
+setImageSize();
+updateSlider(range.value);
+</script>
+
+</body>
+</html>
